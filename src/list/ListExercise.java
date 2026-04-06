@@ -1,6 +1,7 @@
 package list;
 
 import application.Exercise;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class ListExercise extends Exercise {
 
     @Override
     protected void exerciseLogic() {
-        switch (currentPhase){
+        switch (currentPhase) {
             case 0:
                 menuLogic();
                 break;
@@ -38,14 +39,15 @@ public class ListExercise extends Exercise {
         }
     }
 
-
-    private void menuLogic(){
+    private void menuLogic() {
         System.out.println("Bienvenido " +
                 "\n su lista actual es: " + list.toString() +
                 "\n A- Agregar elemento a la lista" +
                 "\n B- remover elemento por índice" +
                 "\n C- Remover por referencia" +
-                "\n D- clear");
+                "\n D- clear" +
+                "\n mm- Main Menu"
+        );
         String userInput = scanner.nextLine().toUpperCase();
         switch (userInput) {
             case "A":
@@ -64,6 +66,9 @@ public class ListExercise extends Exercise {
                 currentPhase = 4;
                 exerciseLogic();
                 break;
+            case "MM":
+                running = true;
+                break;
             default:
                 System.out.println("ingrese otro input");
                 menuLogic();
@@ -75,7 +80,7 @@ public class ListExercise extends Exercise {
         String newValue = scanner.nextLine().toUpperCase();
         list.add(newValue);
         boolean runFunction = false;
-        while(!runFunction){
+        while (!runFunction) {
             System.out.println(list);
             System.out.println("Desea agregar otro elemento? y/otro valor");
             String userInput = scanner.nextLine().toLowerCase();
@@ -100,7 +105,7 @@ public class ListExercise extends Exercise {
         int index = scanner.nextInt();
         list.remove(index);
         boolean runFunction = false;
-        while(!runFunction){
+        while (!runFunction) {
             System.out.println(list);
             System.out.println("Desea borrar otro elemento? y/otro valor");
             String userInput = scanner.nextLine().toLowerCase();
@@ -116,8 +121,6 @@ public class ListExercise extends Exercise {
         }
     }
 
-
-
     private void removeElementByReference() {
         list.add("1");
         list.add("2");
@@ -126,7 +129,7 @@ public class ListExercise extends Exercise {
         String newValue = scanner.nextLine().toUpperCase();
         list.remove(newValue);
         boolean runFunction = false;
-        while(!runFunction){
+        while (!runFunction) {
             System.out.println(list);
             System.out.println("Desea borrar otro elemento? y/otro valor");
             String userInput = scanner.nextLine().toLowerCase();
@@ -141,23 +144,21 @@ public class ListExercise extends Exercise {
             }
         }
 
-
         System.out.println("Indique el elemento de referencia");
         String reference = scanner.nextLine().toUpperCase();
         list.remove(reference);
     }
+
     private void clear() {
         System.out.println("Seguro? y/any");
         String answer = scanner.nextLine().toUpperCase();
-        if (answer.equals("y")){
+        if (answer.equals("y")) {
             list.clear();
         } else {
             currentPhase = 0;
             menuLogic();
         }
-
     }
-
 
 
 }
