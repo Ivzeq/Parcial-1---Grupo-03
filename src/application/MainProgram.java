@@ -1,33 +1,44 @@
 package application;
 
+import list.ListExercise;
 import java.util.Scanner;
 
 public class MainProgram {
-    private static boolean running = true;
 
-    public static void run() {
+    static boolean running = true;
+    private static Exercise exercise;
+    public static void tp1() {
 
         Scanner scanner = new Scanner(System.in);
         while (running) {
-            System.out.println("Hello and welcome!");
+            selectExercise(scanner);
+            if(exercise != null) exercise.run();
 
-            String exercise = selectExercise(scanner);
+        }
+        scanner.close();
+    }
 
-            System.out.println("El numero de ejercicio seleccionado es: " + exercise);
 
-
-            running = false;
+    static void selectExercise(Scanner scanner) {
+        System.out.println("Opciones a elegir: " +
+                "\n 0 - Terminar programa " +
+                "\n 1 - Test exercise" +
+                "\n 2 - Listas");
+        String input = scanner.nextLine();
+        switch (input) {
+            case "0":
+                running = false;
+                break;
+            case "1":
+                exercise = new TestExercise(scanner);
+                running = false;
+                break;
+            case "2":
+                exercise = new ListExercise(scanner);
+                running = false;
+                break;
         }
     }
 
-    public static String selectExercise (Scanner scanner) {
-        Scanner scannerExercise = scanner;
 
-        System.out.println("Ingrese numero de ejercicio");
-
-        String numeroExercise = scannerExercise.nextLine();
-
-        return numeroExercise;
-
-    }
 }
