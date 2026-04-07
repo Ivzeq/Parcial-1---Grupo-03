@@ -102,7 +102,7 @@ public class ListExercise extends Exercise {
         list.add("3");
         System.out.println("Lista: " + list);
         System.out.println("Ingrese el index del valor a borrar: ");
-        int index = scanner.nextInt();
+        int index = Integer.parseInt(scanner.nextLine());
         list.remove(index);
         boolean runFunction = false;
         while (!runFunction) {
@@ -111,7 +111,7 @@ public class ListExercise extends Exercise {
             String userInput = scanner.nextLine().toLowerCase();
             if (userInput.equals("y")) {
                 System.out.println("cargue el elemento a borrar:");
-                index = scanner.nextInt();
+                index = Integer.parseInt(scanner.nextLine());
                 list.remove(index);
             } else {
                 runFunction = true;
