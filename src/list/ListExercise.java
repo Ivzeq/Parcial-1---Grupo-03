@@ -151,9 +151,11 @@ public class ListExercise extends Exercise {
 
     private void clear() {
         System.out.println("Seguro? y/any");
-        String answer = scanner.nextLine().toUpperCase();
+        String answer = scanner.nextLine().toLowerCase();
         if (answer.equals("y")) {
             list.clear();
+            currentPhase = 0;
+            menuLogic();
         } else {
             currentPhase = 0;
             menuLogic();
