@@ -154,12 +154,10 @@ public class ListExercise extends Exercise {
         String answer = scanner.nextLine().toLowerCase();
         if (answer.equals("y")) {
             list.clear();
-            currentPhase = 0;
-            menuLogic();
-        } else {
-            currentPhase = 0;
-            menuLogic();
         }
+        
+            currentPhase = 0;
+            menuLogic();
     }
 
 
