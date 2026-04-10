@@ -1,51 +1,42 @@
 package stackModule;
 
 import application.Exercise;
+import queueModule.SimpleArrayQueue;
+import queueModule.SimpleLinkedQueue;
+
 import java.util.Scanner;
 
-/**
- * Interactive console exercise for {@link SimpleStack}.
- *
- * <p>Extends {@link application.Exercise}. Todo el ciclo interactivo vive
- * dentro de {@link #exerciseLogic()}, que corre su propio loop de menú hasta
- * que el usuario elige salir.</p>
- *
- * <p>Reglas del menú:
- * <ul>
- *   <li><b>push</b>  – repetible.</li>
- *   <li><b>pop</b>   – repetible; verifica que la pila no esté vacía primero.</li>
- *   <li><b>peek</b>  – NO repetible (mismo resultado siempre); vuelve al menú.</li>
- *   <li><b>clear</b> – solo llama a {@code clear()} si la pila no está vacía.</li>
- * </ul>
- */
 public class StackExercise extends Exercise {
 
-    // -----------------------------------------------------------------------
-    // State
-    // -----------------------------------------------------------------------
-
-    private final SimpleStack<String> stack;
+    private SimpleStack<String> stack;
     private boolean firstTime = true;
 
-    // -----------------------------------------------------------------------
-    // Constructor
-    // -----------------------------------------------------------------------
-
-    public StackExercise(SimpleStack<String> stack, Scanner scanner) {
+    public StackExercise( Scanner scanner) {
         super(scanner);
-        this.stack = stack;
+        stack = new SimpleArrayStack<>() {
+        };
     }
 
-    // -----------------------------------------------------------------------
-    // Exercise contract
-    // -----------------------------------------------------------------------
-
-    /**
-     * Corre la sesión interactiva completa.
-     * Es llamado una sola vez por {@link application.Exercise#run()}.
-     */
     @Override
     protected void exerciseLogic() {
+        String choice = "";
+        while (!(choice.equals("1") || choice.equals("2"))){
+            System.out.println("¿Qué implementación desea usar?");
+            System.out.println("  1. SimpleArrayStack");
+            System.out.println("  2. SimpleLinkedStack");
+
+            choice = scanner.nextLine().trim();
+
+            if (choice.equals("1")) {
+                stack = new SimpleArrayStack<>();
+            } else if (choice.equals("2")){
+                stack = new SimpleLinkedStack<>();
+            } else {
+                System.out.println("Opcion invalida, ingrese una correcta");
+            }
+
+        }
+
         boolean active = true;
         while (active) {
             if (firstTime) {
@@ -71,10 +62,6 @@ public class StackExercise extends Exercise {
             }
         }
     }
-
-    // -----------------------------------------------------------------------
-    // Display helpers
-    // -----------------------------------------------------------------------
 
     private void printWelcome() {
         separator();
@@ -105,10 +92,6 @@ public class StackExercise extends Exercise {
         System.out.println("----------------------------------------");
     }
 
-    // -----------------------------------------------------------------------
-    // Operations
-    // -----------------------------------------------------------------------
-
     /** Push – repetible. */
     private void doPush() {
         boolean repeat = true;
@@ -117,8 +100,8 @@ public class StackExercise extends Exercise {
             String element = scanner.nextLine().trim();
             if (!element.isEmpty()) {
                 stack.push(element);
-                System.out.println("  → Pusheado: \"" + element + "\"");
-                System.out.println("  → Pila ahora: " + stack);
+                System.out.println("  ===> Pusheado: \"" + element + "\"");
+                System.out.println("  ===> Pila ahora: " + stack);
             }
             System.out.print("¿Repetir push? (s/n): ");
             repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
@@ -138,8 +121,8 @@ public class StackExercise extends Exercise {
                 break;
             }
             String removed = stack.pop();
-            System.out.println("  → Pop devolvió: \"" + removed + "\"");
-            System.out.println("  → Pila ahora: " + stack);
+            System.out.println("  ===> Pop devolvió: \"" + removed + "\"");
+            System.out.println("  ===> Pila ahora: " + stack);
             System.out.print("¿Repetir pop? (s/n): ");
             repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
         }
@@ -151,7 +134,7 @@ public class StackExercise extends Exercise {
             System.out.println("  ✗ La pila está vacía, no se puede hacer peek.");
             return;
         }
-        System.out.println("  → Tope de la pila: \"" + stack.peek() + "\"");
+        System.out.println("  ===> Tope de la pila: \"" + stack.peek() + "\"");
     }
 
     /** Clear – solo ejecuta si la pila tiene elementos. */
@@ -161,26 +144,6 @@ public class StackExercise extends Exercise {
             return;
         }
         stack.clear();
-        System.out.println("  → Pila vaciada correctamente.");
-    }
-
-    // -----------------------------------------------------------------------
-    // Main
-    // -----------------------------------------------------------------------
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("¿Qué implementación desea usar?");
-        System.out.println("  1. SimpleArrayStack  (respaldada por array)");
-        System.out.println("  2. SimpleLinkedStack (nodos enlazados)");
-        System.out.print("Opción: ");
-        String choice = sc.nextLine().trim();
-
-        SimpleStack<String> stack = choice.equals("2")
-                ? new SimpleLinkedStack<>()
-                : new SimpleArrayStack<>();
-
-        new StackExercise(stack, sc).run();
+        System.out.println("  ===> Pila vaciada correctamente.");
     }
 }

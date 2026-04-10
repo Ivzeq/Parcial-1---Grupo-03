@@ -21,7 +21,7 @@ public class SimpleArrayQueue<E> implements SimpleQueue<E> {
     }
 
     public SimpleArrayQueue(int initialCapacity) {
-        if (initialCapacity < 0) throw new IllegalArgumentException("Negative capacity: " + initialCapacity);
+        if (initialCapacity < 0) throw new IllegalArgumentException("Capacidad negativa: " + initialCapacity);
         data = new Object[Math.max(initialCapacity, 1)];
         head = 0;
         tail = 0;
@@ -32,7 +32,7 @@ public class SimpleArrayQueue<E> implements SimpleQueue<E> {
     public void enqueue(E element) {
         ensureCapacity(size + 1);
         data[tail] = element;
-        tail       = (tail + 1) % data.length; // wrap around
+        tail       = (tail + 1) % data.length;
         size++;
     }
 
@@ -40,8 +40,8 @@ public class SimpleArrayQueue<E> implements SimpleQueue<E> {
     public E dequeue() {
         checkNotEmpty();
         E front  = (E) data[head];
-        data[head] = null;                     // help GC
-        head       = (head + 1) % data.length; // advance with wrap-around
+        data[head] = null;
+        head       = (head + 1) % data.length;
         size--;
         return front;
     }
@@ -79,7 +79,7 @@ public class SimpleArrayQueue<E> implements SimpleQueue<E> {
             sb.append(data[(head + i) % data.length]);
             if (i < size - 1) sb.append(", ");
         }
-        return sb.append(" ←rear]").toString();
+        return sb.append(" ←final]").toString();
     }
 
     private void ensureCapacity(int minCapacity) {

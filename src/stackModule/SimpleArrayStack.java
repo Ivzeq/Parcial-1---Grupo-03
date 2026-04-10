@@ -17,7 +17,7 @@ public class SimpleArrayStack<E> implements SimpleStack<E> {
     }
 
     public SimpleArrayStack(int initialCapacity) {
-        if (initialCapacity < 0) throw new IllegalArgumentException("Negative capacity: " + initialCapacity);
+        if (initialCapacity < 0) throw new IllegalArgumentException("Capacidad negativa: " + initialCapacity);
         data = new Object[Math.max(initialCapacity, 1)];
         size = 0;
     }
@@ -33,7 +33,7 @@ public class SimpleArrayStack<E> implements SimpleStack<E> {
     public E pop() {
         checkNotEmpty();
         E top = (E) data[size - 1];
-        data[size - 1] = null; // help GC
+        data[size - 1] = null;
         size--;
         return top;
     }
@@ -66,7 +66,7 @@ public class SimpleArrayStack<E> implements SimpleStack<E> {
         StringBuilder sb = new StringBuilder("[");
         for (int i = 0; i < size; i++) {
             sb.append(data[i]);
-            if (i == size - 1) sb.append(" ←top");
+            if (i == size - 1) sb.append(" ←tope");
             else sb.append(", ");
         }
         return sb.append("]").toString();

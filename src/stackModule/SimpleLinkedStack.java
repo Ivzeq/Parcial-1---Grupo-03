@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 public class SimpleLinkedStack<E> implements SimpleStack<E> {
     private static class Node<E> {
         E data;
-        Node<E> next; // points toward the bottom of the stack
+        Node<E> next;
 
         Node(E data, Node<E> next) {
             this.data = data;
@@ -24,7 +24,7 @@ public class SimpleLinkedStack<E> implements SimpleStack<E> {
 
     @Override
     public void push(E element) {
-        top  = new Node<>(element, top); // new node's next → old top
+        top  = new Node<>(element, top);
         size++;
     }
 
@@ -32,7 +32,7 @@ public class SimpleLinkedStack<E> implements SimpleStack<E> {
     public E pop() {
         checkNotEmpty();
         E data = top.data;
-        top    = top.next; // advance head toward the bottom
+        top    = top.next;
         size--;
         return data;
     }
@@ -45,7 +45,6 @@ public class SimpleLinkedStack<E> implements SimpleStack<E> {
 
     @Override
     public void clear() {
-        // Sever all links so the GC can reclaim every node.
         while (top != null) {
             Node<E> next = top.next;
             top.data = null;
@@ -68,7 +67,6 @@ public class SimpleLinkedStack<E> implements SimpleStack<E> {
     @Override
     public String toString() {
         if (size == 0) return "[]";
-        // Collect nodes top→bottom, then reverse for bottom→top display.
         Object[] elements = new Object[size];
         Node<E> current   = top;
         for (int i = size - 1; i >= 0; i--) {
@@ -78,7 +76,7 @@ public class SimpleLinkedStack<E> implements SimpleStack<E> {
         StringBuilder sb = new StringBuilder("[");
         for (int i = 0; i < elements.length; i++) {
             sb.append(elements[i]);
-            if (i == elements.length - 1) sb.append(" ←top");
+            if (i == elements.length - 1) sb.append(" ←tope");
             else sb.append(", ");
         }
         return sb.append("]").toString();

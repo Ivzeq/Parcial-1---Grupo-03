@@ -3,50 +3,36 @@ package queueModule;
 import application.Exercise;
 import java.util.Scanner;
 
-/**
- * Interactive console exercise for {@link SimpleQueue}.
- *
- * <p>Extends {@link application.Exercise}. All logic lives inside
- * {@link #exerciseLogic()}, which runs its own menu loop until the user
- * elige salir. Esto respeta el contrato de la clase base, donde
- * {@code run()} llama a {@code exerciseLogic()} una sola vez.</p>
- *
- * <p>Reglas del menú:
- * <ul>
- *   <li><b>enqueue</b> – repetible.</li>
- *   <li><b>dequeue</b> – repetible; verifica que la cola no esté vacía primero.</li>
- *   <li><b>peek</b>    – NO repetible (mismo resultado siempre); vuelve al menú.</li>
- *   <li><b>clear</b>   – solo llama a {@code clear()} si la cola no está vacía.</li>
- * </ul>
- */
 public class QueueExercise extends Exercise {
 
-    // -----------------------------------------------------------------------
-    // State
-    // -----------------------------------------------------------------------
-
-    private final SimpleQueue<String> queue;
+    private SimpleQueue<String> queue;
     private boolean firstTime = true;
 
-    // -----------------------------------------------------------------------
-    // Constructor
-    // -----------------------------------------------------------------------
-
-    public QueueExercise(SimpleQueue<String> queue, Scanner scanner) {
+    public QueueExercise(Scanner scanner) {
         super(scanner);
-        this.queue = queue;
+        queue = new SimpleArrayQueue<> ();
     }
 
-    // -----------------------------------------------------------------------
-    // Exercise contract
-    // -----------------------------------------------------------------------
-
-    /**
-     * Corre la sesión interactiva completa.
-     * Es llamado una sola vez por {@link application.Exercise#run()}.
-     */
     @Override
     protected void exerciseLogic() {
+        String choice = "";
+        while (!(choice.equals("1") || choice.equals("2"))){
+            System.out.println("¿Qué implementación desea usar?");
+            System.out.println("  1. SimpleArrayQueue");
+            System.out.println("  2. SimpleLinkedQueue");
+
+            choice = scanner.nextLine().trim();
+
+            if (choice.equals("1")) {
+                queue = new SimpleArrayQueue<>();
+            } else if (choice.equals("2")){
+                queue = new SimpleLinkedQueue<>();
+            } else {
+                System.out.println("Opcion invalida, ingrese una correcta");
+            }
+
+        }
+
         boolean active = true;
         while (active) {
             if (firstTime) {
@@ -72,10 +58,6 @@ public class QueueExercise extends Exercise {
             }
         }
     }
-
-    // -----------------------------------------------------------------------
-    // Display helpers
-    // -----------------------------------------------------------------------
 
     private void printWelcome() {
         separator();
@@ -106,10 +88,6 @@ public class QueueExercise extends Exercise {
         System.out.println("----------------------------------------");
     }
 
-    // -----------------------------------------------------------------------
-    // Operations
-    // -----------------------------------------------------------------------
-
     /** Enqueue – repetible. */
     private void doEnqueue() {
         boolean repeat = true;
@@ -118,8 +96,8 @@ public class QueueExercise extends Exercise {
             String element = scanner.nextLine().trim();
             if (!element.isEmpty()) {
                 queue.enqueue(element);
-                System.out.println("  → Encolado: \"" + element + "\"");
-                System.out.println("  → Cola ahora: " + queue);
+                System.out.println("  ===> Encolado: \"" + element + "\"");
+                System.out.println("  ===> Cola ahora: " + queue);
             }
             System.out.print("¿Repetir enqueue? (s/n): ");
             repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
@@ -139,8 +117,8 @@ public class QueueExercise extends Exercise {
                 break;
             }
             String removed = queue.dequeue();
-            System.out.println("  → Dequeue devolvió: \"" + removed + "\"");
-            System.out.println("  → Cola ahora: " + queue);
+            System.out.println("  ===> Dequeue devolvió: \"" + removed + "\"");
+            System.out.println("  ===> Cola ahora: " + queue);
             System.out.print("¿Repetir dequeue? (s/n): ");
             repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
         }
@@ -152,7 +130,7 @@ public class QueueExercise extends Exercise {
             System.out.println("  ✗ La cola está vacía, no se puede hacer peek.");
             return;
         }
-        System.out.println("  → Frente de la cola: \"" + queue.peek() + "\"");
+        System.out.println("  ===> Frente de la cola: \"" + queue.peek() + "\"");
     }
 
     /** Clear – solo ejecuta si la cola tiene elementos. */
@@ -162,26 +140,6 @@ public class QueueExercise extends Exercise {
             return;
         }
         queue.clear();
-        System.out.println("  → Cola vaciada correctamente.");
-    }
-
-    // -----------------------------------------------------------------------
-    // Main
-    // -----------------------------------------------------------------------
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("¿Qué implementación desea usar?");
-        System.out.println("  1. SimpleArrayQueue  (buffer circular)");
-        System.out.println("  2. SimpleLinkedQueue (nodos enlazados)");
-        System.out.print("Opción: ");
-        String choice = sc.nextLine().trim();
-
-        SimpleQueue<String> queue = choice.equals("2")
-                ? new SimpleLinkedQueue<>()
-                : new SimpleArrayQueue<>();
-
-        new QueueExercise(queue, sc).run();
+        System.out.println("  ===> Cola vaciada correctamente.");
     }
 }

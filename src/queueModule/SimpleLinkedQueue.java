@@ -6,8 +6,8 @@ public class SimpleLinkedQueue<E> implements SimpleQueue<E> {
 
     private static class Node<E> {
         E       data;
-        Node<E> prev; // toward the front (head)
-        Node<E> next; // toward the rear  (tail)
+        Node<E> prev;
+        Node<E> next;
 
         Node(E data) {
             this.data = data;
@@ -36,7 +36,6 @@ public class SimpleLinkedQueue<E> implements SimpleQueue<E> {
             head = newNode;
             tail = newNode;
         } else {
-            // newNode becomes the new tail.
             newNode.prev = tail;
             tail.next    = newNode;
             tail         = newNode;
@@ -50,7 +49,6 @@ public class SimpleLinkedQueue<E> implements SimpleQueue<E> {
         E data = head.data;
 
         if (size == 1) {
-            // Queue had exactly one element; now it's empty.
             head = null;
             tail = null;
         } else {
@@ -70,7 +68,6 @@ public class SimpleLinkedQueue<E> implements SimpleQueue<E> {
 
     @Override
     public void clear() {
-        // Sever all links to aid GC.
         Node<E> current = head;
         while (current != null) {
             Node<E> next   = current.next;
@@ -104,12 +101,8 @@ public class SimpleLinkedQueue<E> implements SimpleQueue<E> {
             if (current.next != null) sb.append(", ");
             current = current.next;
         }
-        return sb.append(" ←rear]").toString();
+        return sb.append(" ←final]").toString();
     }
-
-    // -----------------------------------------------------------------------
-    // Private helpers
-    // -----------------------------------------------------------------------
 
     private void checkNotEmpty() {
         if (isEmpty()) throw new NoSuchElementException("La cola está vacía.");
