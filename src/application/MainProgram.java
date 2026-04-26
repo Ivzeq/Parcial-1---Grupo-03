@@ -1,5 +1,6 @@
 package application;
 
+import inventarioModule.InventarioExercise;
 import list.ListExercise;
 import queueModule.QueueExercise;
 import reclamosModule.ReclamosExercise;
@@ -32,7 +33,8 @@ public class MainProgram {
                 "\n 3 - Queue" +
                 "\n 4 - Stack" +
                 "\n 5 - Set" +
-                "\n 6 - Sistema de Reclamos (Parcial)");
+                "\n 6 - Sistema de Reclamos" +
+                "\n 7 - Sistema de Inventario");
         String input = scanner.nextLine();
         switch (input) {
             case "0":
@@ -60,6 +62,10 @@ public class MainProgram {
                 break;
             case "6":
                 exercise = new ReclamosExercise(scanner);
+                running = false;
+                break;
+            case "7":
+                exercise = new InventarioExercise(scanner);
                 running = false;
                 break;
         }
