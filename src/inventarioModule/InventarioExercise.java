@@ -3,45 +3,6 @@ package inventarioModule;
 import application.Exercise;
 import java.util.Scanner;
 
-/**
- * Aplicación de inventario de comercio.
- *
- * ══════════════════════════════════════════════════════════════════════
- * DECISIONES DE DISEÑO Y EXPERIENCIA DE USUARIO
- * ══════════════════════════════════════════════════════════════════════
- *
- * 1. ESTRUCTURA DE DATOS: SimpleDictionary<String, Producto>
- *    El diccionario (clave = código, valor = Producto) es la abstracción
- *    correcta: el acceso principal es siempre por código único. Con una
- *    lista o cola, cada búsqueda sería O(n) y conceptualmente forzada.
- *    El código se normaliza a mayúsculas para evitar duplicados por case
- *    ("abc" y "ABC" serían el mismo producto).
- *
- * 2. CÓDIGO ÚNICO GARANTIZADO
- *    Antes de llamar a dict.put() siempre se verifica containsKey().
- *    Si el código existe, se ofrece la ficha del producto existente y se
- *    aborta el alta, evitando sobreescrituras accidentales.
- *
- * 3. EDICIÓN GRANULAR (precio y stock por separado)
- *    Se decidió separar la edición de precio y stock en sub-opciones
- *    en lugar de un formulario unificado. Así el operario puede ajustar
- *    solo el stock al recibir mercadería sin necesidad de reingresar el precio.
- *
- * 4. BONUS: LISTADO CON VALOR TOTAL
- *    Lista todos los productos con precio y stock, y calcula
- *    valor total = Σ (precio × stock) de el inventario completo.
- *    Útil para balances y auditorías rápidas.
- *
- * 5. MANEJO DE INPUTS INVÁLIDOS
- *    leerTexto(), leerPrecio(), leerStock(), leerOpcionMenu() garantizan
- *    datos válidos antes de pasarlos al TDA o al modelo. Nunca se propaga
- *    una excepción al usuario: los errores se atrapan y se repite el prompt.
- *
- * 6. NORMALIZACIÓN DE CÓDIGO
- *    El código se convierte siempre a mayúsculas (trim + toUpperCase) tanto
- *    al dar de alta como al buscarlo, para evitar duplicados por tipeo.
- * ══════════════════════════════════════════════════════════════════════
- */
 public class InventarioExercise extends Exercise {
 
     private final SimpleDictionary<String, Producto> inventario;
@@ -161,7 +122,7 @@ public class InventarioExercise extends Exercise {
 
     /**
      * Permite editar precio y/o stock de un producto existente.
-     *
+
      * Decisión: edición granular por sub-menú. El operario puede actualizar
      * solo el precio, solo el stock, o ambos, en cualquier orden, sin tener
      * que reingresar el otro campo. Esto es más eficiente para operaciones
@@ -241,7 +202,7 @@ public class InventarioExercise extends Exercise {
 
     /**
      * Baja un producto del inventario, con confirmación obligatoria.
-     *
+
      * Decisión: se exige confirmación explícita ("s/n") antes de borrar,
      * ya que es una operación irreversible. Mostrar la ficha completa antes
      * de confirmar evita eliminar el producto equivocado por un typo en el código.
@@ -285,11 +246,11 @@ public class InventarioExercise extends Exercise {
 
     /**
      * Lista todos los productos y calcula el valor total del inventario.
-     *
+
      * Decisión: el valor total (Σ precio × stock) se calcula en el momento
      * del listado, no se guarda como estado, para evitar inconsistencias si
      * el precio o stock de algún producto fue editado manualmente.
-     *
+
      * El listado usa dict.values() (que retorna Object[]) y hace cast a Producto.
      * Esto es seguro porque el TDA solo acepta Producto en su V-slot.
      */
@@ -441,10 +402,10 @@ public class InventarioExercise extends Exercise {
      * productos manualmente al inicio.
      */
     private void cargarDatosDemo() {
-        inventario.put("CAFE01",  new Producto("CAFE01",  "Café molido 250g",      850.00, 120));
-        inventario.put("LECHE01", new Producto("LECHE01", "Leche entera 1L",       450.00, 200));
-        inventario.put("AZUC01",  new Producto("AZUC01",  "Azúcar blanca 1kg",     600.00,  80));
-        inventario.put("GALL01",  new Producto("GALL01",  "Galletitas de vainilla",320.00, 150));
-        inventario.put("AGUA01",  new Producto("AGUA01",  "Agua mineral 1.5L",     350.00, 300));
+        inventario.put("Parcial01",  new Producto("Parcial01",  "Primer Parcial",      850.00, 1));
+        inventario.put("Parcial02", new Producto("Parcial02", "Segundo Parcial",       450.00, 1));
+        inventario.put("Recu01",  new Producto("Recu01",  "Recuperatorio Primer parcial",     600.00,  80));
+        inventario.put("Recu02",  new Producto("Recu02",  "Recuperatorio segundo parcial",880.00, 150));
+        inventario.put("Final",  new Producto("FINAL",  "Final",     350000.00, 300));
     }
 }

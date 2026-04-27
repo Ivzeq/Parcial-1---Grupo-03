@@ -3,15 +3,6 @@ package reclamosModule;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Modelo que representa un reclamo registrado por un operario.
- *
- * Decisión de diseño: Se incluye un timestamp de creación para ofrecer
- * trazabilidad (el operario puede ver cuándo se registró el reclamo).
- * El estado "resuelto" vive dentro del modelo para poder generar un
- * resumen completo al finalizar la sesión sin necesidad de una estructura
- * auxiliar externa.
- */
 public class Reclamo {
 
     // ── Enumerado de urgencia ────────────────────────────────────────────────

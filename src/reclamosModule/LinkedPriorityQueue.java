@@ -2,19 +2,6 @@ package reclamosModule;
 
 import java.util.NoSuchElementException;
 
-/**
- * Implementación de PriorityQueue mediante lista enlazada ordenada.
- *
- * Decisión de diseño: La lista se mantiene siempre ordenada de mayor
- * a menor prioridad durante la inserción. Esto hace que {@code enqueue}
- * sea O(n) pero {@code dequeue} y {@code peek} sean O(1), lo cual es
- * preferible porque las lecturas/atenciones son más frecuentes que las
- * altas en un contexto de atención al consumidor.
- *
- * A igual prioridad los nuevos elementos se insertan DESPUÉS de los
- * ya existentes del mismo nivel, preservando el orden FIFO dentro de
- * cada banda de prioridad.
- */
 public class LinkedPriorityQueue<E> implements PriorityQueue<E> {
 
     // ── Nodo interno ────────────────────────────────────────────────────────

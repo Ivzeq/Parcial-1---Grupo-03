@@ -4,48 +4,6 @@ import application.Exercise;
 
 import java.util.Scanner;
 
-/**
- * Aplicación de gestión de reclamos para empresas de atención al consumidor.
- *
- * ══════════════════════════════════════════════════════════════════════
- * DECISIONES DE DISEÑO Y EXPERIENCIA DE USUARIO
- * ══════════════════════════════════════════════════════════════════════
- *
- * 1. ESTRUCTURA DE DATOS CENTRAL
- *    Se utiliza una {@link LinkedPriorityQueue} de {@link Reclamo}.
- *    La cola con prioridad modela fielmente el comportamiento de un
- *    centro de atención: los reclamos más urgentes se atienden primero
- *    independientemente del orden de llegada.  A igual urgencia se
- *    respeta FIFO (orden de llegada), lo que es justo con el cliente.
- *
- * 2. FLUJO DE VISUALIZACIÓN (sin destruir la cola)
- *    Al listar reclamos se extraen TODOS los nodos de la cola, se
- *    presentan al operario uno a uno (de mayor a menor urgencia) y,
- *    al terminar, los no resueltos se re-insertan con su prioridad
- *    original.  Esto garantiza que la cola nunca pierde datos aunque
- *    el operario decida no resolver ninguno.
- *
- *    Alternativa descartada: mantener una lista auxiliar paralela.
- *    Se descartó porque duplicaría el estado y podría causar
- *    inconsistencias; el re-encolado es más limpio con un solo TDA.
- *
- * 3. MANEJO DE INPUTS INVÁLIDOS
- *    Cada lectura de usuario pasa por un método helper (leerTexto,
- *    leerUrgencia, leerSiNo, leerOpcionMenu) que garantiza un valor
- *    válido antes de pasarlo al TDA.  El TDA puede lanzar excepciones,
- *    pero la aplicación las previene con estas validaciones.
- *
- * 4. RESUMEN DE SESIÓN
- *    Al salir se muestra cuántos reclamos se resolvieron vs. quedan
- *    pendientes.  Esto da al operario una visión del trabajo de la
- *    sesión sin necesidad de persistencia entre sesiones.
- *
- * 5. SEPARADORES VISUALES
- *    Se usan líneas de caracteres especiales para delimitar secciones
- *    y mejorar la legibilidad en la consola, compensando la ausencia
- *    de interfaz gráfica.
- * ══════════════════════════════════════════════════════════════════════
- */
 public class ReclamosExercise extends Exercise {
 
     // ── Estado ───────────────────────────────────────────────────────────────
