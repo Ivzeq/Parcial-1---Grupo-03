@@ -2,22 +2,10 @@ package reclamosModule;
 
 import java.util.NoSuchElementException;
 
-/**
- * Implementación de PriorityQueue mediante lista enlazada ordenada.
- *
- * Decisión de diseño: La lista se mantiene siempre ordenada de mayor
- * a menor prioridad durante la inserción. Esto hace que {@code enqueue}
- * sea O(n) pero {@code dequeue} y {@code peek} sean O(1), lo cual es
- * preferible porque las lecturas/atenciones son más frecuentes que las
- * altas en un contexto de atención al consumidor.
- *
- * A igual prioridad los nuevos elementos se insertan DESPUÉS de los
- * ya existentes del mismo nivel, preservando el orden FIFO dentro de
- * cada banda de prioridad.
- */
 public class LinkedPriorityQueue<E> implements PriorityQueue<E> {
 
     // ── Nodo interno ────────────────────────────────────────────────────────
+
     private static class Node<E> {
         E       data;
         int     priority;
@@ -31,7 +19,8 @@ public class LinkedPriorityQueue<E> implements PriorityQueue<E> {
     }
 
     // ── Estado ───────────────────────────────────────────────────────────────
-    private Node<E> head;   // nodo de mayor prioridad (frente)
+
+    private Node<E> head;
     private int     size;
 
     public LinkedPriorityQueue() {
@@ -53,13 +42,10 @@ public class LinkedPriorityQueue<E> implements PriorityQueue<E> {
 
         Node<E> newNode = new Node<>(element, priority);
 
-        // Caso 1: lista vacía o nueva prioridad es estrictamente mayor que el frente
         if (head == null || priority > head.priority) {
             newNode.next = head;
             head = newNode;
         } else {
-            // Avanzar mientras el siguiente nodo tenga prioridad >= nueva
-            // (insertamos DESPUÉS del último igual → FIFO dentro del mismo nivel)
             Node<E> current = head;
             while (current.next != null && current.next.priority >= priority) {
                 current = current.next;
@@ -112,6 +98,7 @@ public class LinkedPriorityQueue<E> implements PriorityQueue<E> {
     public boolean isEmpty() { return size == 0; }
 
     // ── Helper privado ────────────────────────────────────────────────────────
+
     private void checkNotEmpty() {
         if (isEmpty()) {
             throw new NoSuchElementException("La cola de prioridad está vacía.");

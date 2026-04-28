@@ -17,7 +17,6 @@ public class SetExercise extends Exercise {
 
     @Override
     protected void exerciseLogic() {
-        // Choose implementation once
         String choice = "";
         while (!(choice.equals("1") || choice.equals("2"))) {
             System.out.println("¿Qué implementación desea usar?");
