@@ -3,18 +3,8 @@ package reclamosModule;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Modelo que representa un reclamo registrado por un operario.
- *
- * Decisión de diseño: Se incluye un timestamp de creación para ofrecer
- * trazabilidad (el operario puede ver cuándo se registró el reclamo).
- * El estado "resuelto" vive dentro del modelo para poder generar un
- * resumen completo al finalizar la sesión sin necesidad de una estructura
- * auxiliar externa.
- */
 public class Reclamo {
 
-    // ── Enumerado de urgencia ────────────────────────────────────────────────
     public enum Urgencia {
         BAJO    (1, "Bajo    "),
         MEDIO   (2, "Medio   "),
@@ -32,12 +22,6 @@ public class Reclamo {
         public int    getValor()    { return valor; }
         public String getEtiqueta() { return etiqueta; }
 
-        /**
-         * Parsea un texto ingresado por el usuario (número o nombre).
-         * Acepta: "1","bajo" / "2","medio" / "3","alto" / "4","critico","crítico"
-         *
-         * @throws IllegalArgumentException si el texto no corresponde a ninguna urgencia
-         */
         public static Urgencia desde(String texto) {
             if (texto == null || texto.isBlank()) {
                 throw new IllegalArgumentException("La urgencia no puede estar vacía.");
@@ -55,6 +39,7 @@ public class Reclamo {
     }
 
     // ── Estado ───────────────────────────────────────────────────────────────
+
     private static final DateTimeFormatter FMT =
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -68,9 +53,7 @@ public class Reclamo {
     private       boolean       resuelto;
 
     // ── Constructor ──────────────────────────────────────────────────────────
-    /**
-     * @throws IllegalArgumentException si título, descripción o urgencia son inválidos
-     */
+
     public Reclamo(String titulo, String descripcion, Urgencia urgencia) {
         if (titulo == null || titulo.isBlank()) {
             throw new IllegalArgumentException("El título no puede estar vacío.");
@@ -90,6 +73,7 @@ public class Reclamo {
     }
 
     // ── Getters ──────────────────────────────────────────────────────────────
+
     public int      getId()          { return id; }
     public String   getTitulo()      { return titulo; }
     public String   getDescripcion() { return descripcion; }
@@ -101,10 +85,11 @@ public class Reclamo {
     }
 
     // ── Mutador ───────────────────────────────────────────────────────────────
+
     public void marcarResuelto() { this.resuelto = true; }
 
     // ── Presentación ─────────────────────────────────────────────────────────
-    /** Línea compacta para la lista de la cola. */
+
     @Override
     public String toString() {
         return String.format("[#%03d] %-40s | %s | %s",
@@ -114,7 +99,6 @@ public class Reclamo {
             getFechaFormateada());
     }
 
-    /** Vista detallada para cuando el operario atiende el reclamo. */
     public String toDetalle() {
         String linea = "─".repeat(58);
         return  linea + "\n" +

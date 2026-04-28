@@ -3,59 +3,22 @@ package inventarioModule;
 import application.Exercise;
 import java.util.Scanner;
 
-/**
- * Aplicación de inventario de comercio.
- *
- * ══════════════════════════════════════════════════════════════════════
- * DECISIONES DE DISEÑO Y EXPERIENCIA DE USUARIO
- * ══════════════════════════════════════════════════════════════════════
- *
- * 1. ESTRUCTURA DE DATOS: SimpleDictionary<String, Producto>
- *    El diccionario (clave = código, valor = Producto) es la abstracción
- *    correcta: el acceso principal es siempre por código único. Con una
- *    lista o cola, cada búsqueda sería O(n) y conceptualmente forzada.
- *    El código se normaliza a mayúsculas para evitar duplicados por case
- *    ("abc" y "ABC" serían el mismo producto).
- *
- * 2. CÓDIGO ÚNICO GARANTIZADO
- *    Antes de llamar a dict.put() siempre se verifica containsKey().
- *    Si el código existe, se ofrece la ficha del producto existente y se
- *    aborta el alta, evitando sobreescrituras accidentales.
- *
- * 3. EDICIÓN GRANULAR (precio y stock por separado)
- *    Se decidió separar la edición de precio y stock en sub-opciones
- *    en lugar de un formulario unificado. Así el operario puede ajustar
- *    solo el stock al recibir mercadería sin necesidad de reingresar el precio.
- *
- * 4. BONUS: LISTADO CON VALOR TOTAL
- *    Lista todos los productos con precio y stock, y calcula
- *    valor total = Σ (precio × stock) de el inventario completo.
- *    Útil para balances y auditorías rápidas.
- *
- * 5. MANEJO DE INPUTS INVÁLIDOS
- *    leerTexto(), leerPrecio(), leerStock(), leerOpcionMenu() garantizan
- *    datos válidos antes de pasarlos al TDA o al modelo. Nunca se propaga
- *    una excepción al usuario: los errores se atrapan y se repite el prompt.
- *
- * 6. NORMALIZACIÓN DE CÓDIGO
- *    El código se convierte siempre a mayúsculas (trim + toUpperCase) tanto
- *    al dar de alta como al buscarlo, para evitar duplicados por tipeo.
- * ══════════════════════════════════════════════════════════════════════
- */
 public class InventarioExercise extends Exercise {
 
     private final SimpleDictionary<String, Producto> inventario;
 
     private static final String LINEA_DOBLE = "═".repeat(60);
+
     private static final String LINEA_FINA  = "─".repeat(60);
 
     public InventarioExercise(Scanner scanner) {
         super(scanner);
         inventario = new LinkedDictionary<>();
-        cargarDatosDemo();  // algunos productos de ejemplo para facilitar la demo
+        cargarDatosDemo();
     }
 
     @Override
+
     protected void exerciseLogic() {
         mostrarBienvenida();
 
@@ -69,7 +32,7 @@ public class InventarioExercise extends Exercise {
                 case "2" -> agregarProducto();
                 case "3" -> editarProducto();
                 case "4" -> eliminarProducto();
-                case "5" -> listarInventario();   // agregado extra para demostrar nuestro poder
+                case "5" -> listarInventario();
                 case "0" -> {
                     System.out.println(LINEA_FINA);
                     System.out.println("  Saliendo del sistema de inventario. ¡Hasta luego!");
@@ -80,16 +43,8 @@ public class InventarioExercise extends Exercise {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // OPCIÓN 1 – BUSCAR PRODUCTO POR CÓDIGO
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Busca un producto por código y muestra su ficha completa.
-     *
-     * Decisión: se normaliza el código ingresado a mayúsculas antes de
-     * consultar el diccionario, de modo que "abc01" y "ABC01" son equivalentes.
-     */
     private void buscarProducto() {
         System.out.println(LINEA_DOBLE);
         System.out.println("  BUSCAR PRODUCTO");
@@ -112,17 +67,8 @@ public class InventarioExercise extends Exercise {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // OPCIÓN 2 – AGREGAR PRODUCTO
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Da de alta un nuevo producto.
-     *
-     * Decisión: se verifica la unicidad del código ANTES de pedir los demás
-     * datos. Si el código ya existe se muestra la ficha del producto existente
-     * y se aborta, evitando que el operario complete un formulario largo para nada.
-     */
     private void agregarProducto() {
         System.out.println(LINEA_DOBLE);
         System.out.println("  AGREGAR PRODUCTO");
@@ -155,18 +101,8 @@ public class InventarioExercise extends Exercise {
         System.out.println(nuevo.toDetalle());
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // OPCIÓN 3 – EDITAR PRODUCTO
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Permite editar precio y/o stock de un producto existente.
-     *
-     * Decisión: edición granular por sub-menú. El operario puede actualizar
-     * solo el precio, solo el stock, o ambos, en cualquier orden, sin tener
-     * que reingresar el otro campo. Esto es más eficiente para operaciones
-     * cotidianas (ej.: recibir mercadería → actualizar solo stock).
-     */
     private void editarProducto() {
         System.out.println(LINEA_DOBLE);
         System.out.println("  EDITAR PRODUCTO");
@@ -229,23 +165,12 @@ public class InventarioExercise extends Exercise {
             }
         }
 
-        // No es necesario hacer put() de nuevo: Producto es un objeto;
-        // el diccionario guarda la referencia y los cambios son visibles.
         System.out.println("  Estado final del producto:");
         System.out.println(p.toDetalle());
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // OPCIÓN 4 – ELIMINAR PRODUCTO
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Baja un producto del inventario, con confirmación obligatoria.
-     *
-     * Decisión: se exige confirmación explícita ("s/n") antes de borrar,
-     * ya que es una operación irreversible. Mostrar la ficha completa antes
-     * de confirmar evita eliminar el producto equivocado por un typo en el código.
-     */
     private void eliminarProducto() {
         System.out.println(LINEA_DOBLE);
         System.out.println("  ELIMINAR PRODUCTO");
@@ -279,20 +204,8 @@ public class InventarioExercise extends Exercise {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // OPCIÓN 5 – LISTAR EL INVENTARIO
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Lista todos los productos y calcula el valor total del inventario.
-     *
-     * Decisión: el valor total (Σ precio × stock) se calcula en el momento
-     * del listado, no se guarda como estado, para evitar inconsistencias si
-     * el precio o stock de algún producto fue editado manualmente.
-     *
-     * El listado usa dict.values() (que retorna Object[]) y hace cast a Producto.
-     * Esto es seguro porque el TDA solo acepta Producto en su V-slot.
-     */
     private void listarInventario() {
         System.out.println(LINEA_DOBLE);
         System.out.println("  LISTADO COMPLETO DEL INVENTARIO");
@@ -332,9 +245,7 @@ public class InventarioExercise extends Exercise {
         System.out.println(LINEA_DOBLE);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // PRESENTACIÓN
-    // ══════════════════════════════════════════════════════════════════════════
 
     private void mostrarBienvenida() {
         System.out.println(LINEA_DOBLE);
@@ -358,11 +269,8 @@ public class InventarioExercise extends Exercise {
         System.out.print("  Opción: ");
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // HELPERS DE LECTURA
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /** Lee texto no vacío; repite hasta obtener al menos un carácter real. */
     private String leerTexto(String prompt) {
         String valor = "";
         while (valor.isBlank()) {
@@ -375,10 +283,6 @@ public class InventarioExercise extends Exercise {
         return valor;
     }
 
-    /**
-     * Lee un precio (double > 0).
-     * Acepta tanto punto como coma decimal para mayor usabilidad.
-     */
     private double leerPrecio(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -393,10 +297,6 @@ public class InventarioExercise extends Exercise {
         }
     }
 
-    /**
-     * Lee un stock (int >= 0).
-     * El stock puede ser 0 (producto agotado pero activo en catálogo).
-     */
     private int leerStock(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -411,7 +311,6 @@ public class InventarioExercise extends Exercise {
         }
     }
 
-    /** Lee "s" o "n" (case-insensitive); repite ante cualquier otro valor. */
     private String leerSiNo() {
         String valor = "";
         while (!valor.equals("s") && !valor.equals("n")) {
@@ -423,23 +322,13 @@ public class InventarioExercise extends Exercise {
         return valor;
     }
 
-    /** Normaliza un código: trim + mayúsculas. */
     private String normalizarCodigo(String raw) {
         if (raw == null) return "";
         return raw.trim().toUpperCase();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     // DATOS DE DEMO
-    // ══════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Carga algunos productos de ejemplo para que la demo sea más ilustrativa.
-     *
-     * Decisión: tener datos pre-cargados permite al evaluador probar de
-     * inmediato la búsqueda, edición y listado sin tener que dar de alta
-     * productos manualmente al inicio.
-     */
     private void cargarDatosDemo() {
         inventario.put("CAFE01",  new Producto("CAFE01",  "Café molido 250g",      850.00, 120));
         inventario.put("LECHE01", new Producto("LECHE01", "Leche entera 1L",       450.00, 200));

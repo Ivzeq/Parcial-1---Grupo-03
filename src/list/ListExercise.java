@@ -1,164 +1,164 @@
 package list;
 
 import application.Exercise;
-
 import listModule.SimpleArrayList;
+import listModule.SimpleLinkedList;
 import listModule.SimpleList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class ListExercise extends Exercise {
 
-    private int currentPhase = 0;
     private SimpleList<String> list;
+    private boolean firstTime = true;
 
     public ListExercise(Scanner scnr) {
         super(scnr);
         list = new SimpleArrayList<>();
     }
 
-
     @Override
     protected void exerciseLogic() {
-        switch (currentPhase) {
-            case 0:
-                menuLogic();
-                break;
-            case 1:
-                addElement();
-                break;
-            case 2:
-                removeElementByIndex();
-                break;
-            case 3:
-                removeElementByReference();
-                break;
-            case 4:
-                clear();
-                break;
-        }
-    }
-
-    private void menuLogic() {
-        System.out.println("Bienvenido " +
-                "\n su lista actual es: " + list.toString() +
-                "\n A- Agregar elemento a la lista" +
-                "\n B- remover elemento por índice" +
-                "\n C- Remover por referencia" +
-                "\n D- clear" +
-                "\n mm- Main Menu"
-        );
-        String userInput = scanner.nextLine().toUpperCase();
-        switch (userInput) {
-            case "A":
-                currentPhase = 1;
-                exerciseLogic();
-                break;
-            case "B":
-                currentPhase = 2;
-                exerciseLogic();
-                break;
-            case "C":
-                currentPhase = 3;
-                exerciseLogic();
-                break;
-            case "D":
-                currentPhase = 4;
-                exerciseLogic();
-                break;
-            case "MM":
-                running = true;
-                break;
-            default:
-                System.out.println("ingrese otro input");
-                menuLogic();
-        }
-    }
-
-    private void addElement() {
-        System.out.println("Cargue nuevo elemento");
-        String newValue = scanner.nextLine().toUpperCase();
-        list.add(newValue);
-        boolean runFunction = false;
-        while (!runFunction) {
-            System.out.println(list);
-            System.out.println("Desea agregar otro elemento? y/otro valor");
-            String userInput = scanner.nextLine().toLowerCase();
-            if (userInput.equals("y")) {
-                System.out.println("Cargue el nuevo elemento");
-                newValue = scanner.nextLine().toUpperCase();
-                list.add(newValue);
+        String choice = "";
+        while (!(choice.equals("1") || choice.equals("2"))) {
+            System.out.println("¿Qué implementación desea usar?");
+            System.out.println("  1. SimpleArrayList");
+            System.out.println("  2. SimpleLinkedList");
+            choice = scanner.nextLine().trim();
+            if (choice.equals("1")) {
+                list = new SimpleArrayList<>();
+            } else if (choice.equals("2")) {
+                list = new SimpleLinkedList<>();
             } else {
-                runFunction = true;
-                currentPhase = 0;
-                menuLogic();
+                System.out.println("  Opción inválida, ingrese una correcta.");
+            }
+        }
+
+        boolean active = true;
+        while (active) {
+            if (firstTime) {
+                printWelcome();
+                firstTime = false;
+            } else {
+                printStatus();
+            }
+
+            printMenu();
+            String option = scanner.nextLine().trim();
+
+            switch (option) {
+                case "1" -> doAdd();
+                case "2" -> doRemoveByIndex();
+                case "3" -> doRemoveByReference();
+                case "4" -> doClear();
+                case "0" -> {
+                    System.out.println("  Saliendo del ejercicio de Lista. ¡Hasta luego!");
+                    active = false;
+                }
+                default -> System.out.println("  Opción no reconocida. Intente nuevamente.");
             }
         }
     }
 
-    private void removeElementByIndex() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        System.out.println("Lista: " + list);
-        System.out.println("Ingrese el index del valor a borrar: ");
-        int index = Integer.parseInt(scanner.nextLine());
-        list.remove(index);
-        boolean runFunction = false;
-        while (!runFunction) {
-            System.out.println(list);
-            System.out.println("Desea borrar otro elemento? y/otro valor");
-            String userInput = scanner.nextLine().toLowerCase();
-            if (userInput.equals("y")) {
-                System.out.println("cargue el elemento a borrar:");
-                index = Integer.parseInt(scanner.nextLine());
+    private void printWelcome() {
+        separator();
+        System.out.println("  Bienvenido al ejercicio de Lista");
+        System.out.println("  Implementación: " + list.getClass().getSimpleName());
+        separator();
+    }
+
+    private void printStatus() {
+        separator();
+        System.out.println("  Estado de la lista");
+        System.out.println("  isEmpty : " + list.isEmpty());
+        System.out.println("  size    : " + list.size());
+        System.out.println("  lista   : " + list);
+        separator();
+    }
+
+    private void printMenu() {
+        System.out.println("Seleccione una operación:");
+        System.out.println("  1. add              (agregar elemento)");
+        System.out.println("  2. remove por índice");
+        System.out.println("  3. remove por referencia");
+        System.out.println("  4. clear            (vaciar la lista)");
+        System.out.println("  0. Salir");
+        System.out.print("Opción: ");
+    }
+
+    private void separator() {
+        System.out.println("----------------------------------------");
+    }
+
+    private void doAdd() {
+        boolean repeat = true;
+        while (repeat) {
+            System.out.print("  Elemento a agregar: ");
+            String element = scanner.nextLine().trim().toUpperCase();
+            if (!element.isEmpty()) {
+                list.add(element);
+                System.out.println("  ===> Agregado: \"" + element + "\"");
+                System.out.println("  ===> Lista ahora: " + list);
+            }
+            System.out.print("  ¿Repetir add? (s/n): ");
+            repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
+        }
+    }
+
+    private void doRemoveByIndex() {
+        if (list.isEmpty()) {
+            System.out.println("  ✗ La lista está vacía, no se puede remover por índice.");
+            return;
+        }
+        boolean repeat = true;
+        while (repeat) {
+            if (list.isEmpty()) {
+                System.out.println("  ✗ La lista está vacía, no se puede continuar.");
+                break;
+            }
+            System.out.println("  Lista actual: " + list);
+            System.out.print("  Índice a remover (0-" + (list.size() - 1) + "): ");
+            String linea = scanner.nextLine().trim();
+            try {
+                int index = Integer.parseInt(linea);
                 list.remove(index);
-            } else {
-                runFunction = true;
-                currentPhase = 0;
-                menuLogic();
+                System.out.println("  ===> Lista ahora: " + list);
+            } catch (NumberFormatException e) {
+                System.out.println("  ✗ Ingrese un número entero válido.");
+            } catch (Exception e) {
+                System.out.println("  ✗ Índice fuera de rango.");
             }
+            System.out.print("  ¿Repetir remove por índice? (s/n): ");
+            repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
         }
     }
 
-    private void removeElementByReference() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        System.out.println("Lista: " + list);
-        String newValue = scanner.nextLine().toUpperCase();
-        list.remove(newValue);
-        boolean runFunction = false;
-        while (!runFunction) {
-            System.out.println(list);
-            System.out.println("Desea borrar otro elemento? y/otro valor");
-            String userInput = scanner.nextLine().toLowerCase();
-            if (userInput.equals("y")) {
-                System.out.println("cargue el elemento a boorar:");
-                newValue = scanner.nextLine().toUpperCase();
-                list.remove(newValue);
-            } else {
-                runFunction = true;
-                currentPhase = 0;
-                menuLogic();
+    private void doRemoveByReference() {
+        if (list.isEmpty()) {
+            System.out.println("  ✗ La lista está vacía, no se puede remover por referencia.");
+            return;
+        }
+        boolean repeat = true;
+        while (repeat) {
+            if (list.isEmpty()) {
+                System.out.println("  ✗ La lista está vacía, no se puede continuar.");
+                break;
             }
+            System.out.println("  Lista actual: " + list);
+            System.out.print("  Elemento a remover: ");
+            String element = scanner.nextLine().trim().toUpperCase();
+            list.remove(element);
+            System.out.println("  ===> Lista ahora: " + list);
+            System.out.print("  ¿Repetir remove por referencia? (s/n): ");
+            repeat = scanner.nextLine().trim().equalsIgnoreCase("s");
         }
-
-        System.out.println("Indique el elemento de referencia");
-        String reference = scanner.nextLine().toUpperCase();
-        list.remove(reference);
     }
 
-    private void clear() {
-        System.out.println("Seguro? y/any");
-        String answer = scanner.nextLine().toLowerCase();
-        if (answer.equals("y")) {
-            list.clear();
+    private void doClear() {
+        if (list.isEmpty()) {
+            System.out.println("  ✗ La lista ya está vacía, no es necesario limpiarla.");
+            return;
         }
-        
-            currentPhase = 0;
-            menuLogic();
+        list.clear();
+        System.out.println("  ===> Lista vaciada correctamente.");
     }
-
-
 }

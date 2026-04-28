@@ -17,7 +17,6 @@ public class SetExercise extends Exercise {
 
     @Override
     protected void exerciseLogic() {
-        // Choose implementation once
         String choice = "";
         while (!(choice.equals("1") || choice.equals("2"))) {
             System.out.println("¿Qué implementación desea usar?");
@@ -64,20 +63,20 @@ public class SetExercise extends Exercise {
     }
 
     private void doOperation(SimpleSet<String> set, String name) {
-        String opChoice = "";
-        while (!(opChoice.equals("1") || opChoice.equals("2"))) {
+        String operationNumber = "";
+        while (!(operationNumber.equals("1") || operationNumber.equals("2"))) {
             System.out.println("  ¿Qué desea hacer sobre Set " + name + "?");
             System.out.println("  1. Agregar elemento");
             System.out.println("  2. Remover elemento");
-            opChoice = scanner.nextLine().trim();
-            if (!opChoice.equals("1") && !opChoice.equals("2")) {
+            operationNumber = scanner.nextLine().trim();
+            if (!operationNumber.equals("1") && !operationNumber.equals("2")) {
                 System.out.println("  Opción inválida.");
             }
         }
 
         boolean repeat = true;
         while (repeat) {
-            if (opChoice.equals("1")) {
+            if (operationNumber.equals("1")) {
                 System.out.print("  Elemento a agregar: ");
                 String element = scanner.nextLine().trim().toUpperCase();
                 boolean success = set.add(element);

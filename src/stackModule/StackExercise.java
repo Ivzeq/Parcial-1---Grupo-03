@@ -92,7 +92,6 @@ public class StackExercise extends Exercise {
         System.out.println("----------------------------------------");
     }
 
-    /** Push – repetible. */
     private void doPush() {
         boolean repeat = true;
         while (repeat) {
@@ -108,7 +107,6 @@ public class StackExercise extends Exercise {
         }
     }
 
-    /** Pop – repetible; verifica vacío antes de entrar y en cada iteración. */
     private void doPop() {
         if (stack.isEmpty()) {
             System.out.println("  ✗ La pila está vacía, no se puede hacer pop.");
@@ -128,7 +126,6 @@ public class StackExercise extends Exercise {
         }
     }
 
-    /** Peek – NO repetible; vuelve al menú principal automáticamente. */
     private void doPeek() {
         if (stack.isEmpty()) {
             System.out.println("  ✗ La pila está vacía, no se puede hacer peek.");
@@ -137,7 +134,6 @@ public class StackExercise extends Exercise {
         System.out.println("  ===> Tope de la pila: \"" + stack.peek() + "\"");
     }
 
-    /** Clear – solo ejecuta si la pila tiene elementos. */
     private void doClear() {
         if (stack.isEmpty()) {
             System.out.println("  ✗ La pila ya está vacía, no es necesario limpiarla.");

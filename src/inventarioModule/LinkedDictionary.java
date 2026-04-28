@@ -1,27 +1,9 @@
 package inventarioModule;
 
-/**
- * Implementación de {@link SimpleDictionary} mediante lista enlazada de pares.
- *
- * Decisión de diseño: se eligió lista enlazada sobre tabla hash o árbol porque:
- *   - Mantiene coherencia con el enfoque de TDAs propios del proyecto
- *     (lista enlazada ya era conocida por el equipo: SimpleLinkedList,
- *      SimpleLinkedQueue, SimpleLinkedStack, SimpleLinkedSet).
- *   - Para inventarios de comercio pequeños/medianos la diferencia de
- *     rendimiento entre O(n) y O(1) es imperceptible al usuario.
- *   - Evita complejidad extra (función hash, resolución de colisiones).
- *
- * Complejidades:
- *   put / get / remove / containsKey → O(n)
- *   size / isEmpty                   → O(1)
- *   keys / values                    → O(n)
- *
- * @param <K> tipo de la clave
- * @param <V> tipo del valor
- */
 public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
 
     // ── Nodo interno ──────────────────────────────────────────────────────────
+
     private static class Entry<K, V> {
         K       key;
         V       value;
@@ -35,6 +17,7 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
     }
 
     // ── Estado ────────────────────────────────────────────────────────────────
+
     private Entry<K, V> head;
     private int         size;
 
@@ -52,7 +35,6 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
             throw new IllegalArgumentException("El valor no puede ser null.");
         }
 
-        // Si la clave ya existe, actualizamos y retornamos el valor anterior
         Entry<K, V> existing = findEntry(key);
         if (existing != null) {
             V old = existing.value;
@@ -60,7 +42,6 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
             return old;
         }
 
-        // Clave nueva: insertar al frente (O(1))
         Entry<K, V> newEntry = new Entry<>(key, value);
         newEntry.next = head;
         head          = newEntry;
@@ -81,7 +62,6 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
 
         if (head == null) return null;
 
-        // Caso especial: la clave está en el nodo cabeza
         if (head.key.equals(key)) {
             V old = head.value;
             head  = head.next;
@@ -89,7 +69,6 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
             return old;
         }
 
-        // Buscar con puntero al nodo anterior
         Entry<K, V> prev = head;
         while (prev.next != null) {
             if (prev.next.key.equals(key)) {
@@ -100,7 +79,7 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
             }
             prev = prev.next;
         }
-        return null; // clave no encontrada
+        return null;
     }
 
     @Override
@@ -154,7 +133,6 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
 
     // ── Helpers privados ──────────────────────────────────────────────────────
 
-    /** Recorre la lista buscando la entrada con la clave dada. O(n). */
     private Entry<K, V> findEntry(K key) {
         Entry<K, V> current = head;
         while (current != null) {
@@ -164,10 +142,6 @@ public class LinkedDictionary<K, V> implements SimpleDictionary<K, V> {
         return null;
     }
 
-    /**
-     * Valida que la clave no sea null ni, si es String, vacía/en blanco.
-     * @throws IllegalArgumentException si la clave es inválida
-     */
     private void validateKey(K key) {
         if (key == null) {
             throw new IllegalArgumentException("La clave no puede ser null.");
